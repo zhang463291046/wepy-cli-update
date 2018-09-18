@@ -14,7 +14,7 @@
     "module-a": false,
     "./src/components/list": "./src/components/wepy-list.wpy"
   },
-  "author": "张坚良 <463291046@qq.com>",
+  "author": "张** <463291046@qq.com>",
   "license": "MIT",
   "dependencies": {
     "redux": "^3.7.2",
@@ -23,7 +23,8 @@
     "wepy": "^1.7.2",
     "wepy-async-function": "^1.4.4",
     "wepy-com-toast": "^1.0.2",
-    "wepy-redux": "^1.5.3"
+    "wepy-redux": "^1.5.3",
+    "wepy-web": "^1.6.0"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.1",
@@ -39,8 +40,8 @@
     "eslint-plugin-html": "^2.0.1",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^2.0.1",
-    "wepy-eslint": "^1.5.3",
-    "wepy-compiler-babel": "^1.5.1",
-    "wepy-compiler-less": "^1.3.10"
+    "wepy-compiler-babel": "^1.5.3",
+    "wepy-compiler-less": "^1.3.12",
+    "wepy-eslint": "^1.5.3"
   }
 }
