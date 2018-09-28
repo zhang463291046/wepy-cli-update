@@ -15,7 +15,8 @@ import 'wepy-async-function'
 
 import { setStore } from 'wepy-redux'
 import configStore from './store'
-
+import components from '@/components/index'
+console.log(components)
 const store = configStore()
 setStore(store)
 
@@ -29,6 +30,38 @@ export default class extends wepy.app {
       navigationBarBackgroundColor: '#fff',
       navigationBarTitleText: 'WeChat',
       navigationBarTextStyle: 'black'
+    },
+    tabBar: {
+      color: '',
+      selectedColor: '#2db7f5',
+      backgroundColor: '',
+      borderStyle: '',
+      list: [
+        {
+          iconPath: 'assets/icon_home.png',
+          selectedIconPath: 'assets/icon_home_active.png',
+          pagePath: 'pages/index',
+          text: '首页'
+        },
+        {
+          iconPath: 'assets/icon_home.png',
+          selectedIconPath: 'assets/icon_home_active.png',
+          pagePath: 'pages/index',
+          text: '首页'
+        },
+        {
+          iconPath: 'assets/icon_home.png',
+          selectedIconPath: 'assets/icon_home_active.png',
+          pagePath: 'pages/index',
+          text: '首页'
+        },
+        {
+          iconPath: 'assets/icon_home.png',
+          selectedIconPath: 'assets/icon_home_active.png',
+          pagePath: 'pages/index',
+          text: '首页'
+        }
+      ]
     }
   }
 
@@ -42,6 +75,8 @@ export default class extends wepy.app {
   }
 
   onLaunch() {
+    wepy.$components = components
+    console.log(wepy)
     this.testAsync()
   }
 
