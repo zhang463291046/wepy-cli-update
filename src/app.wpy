@@ -11,12 +11,12 @@
 
 <script>
 import wepy from 'wepy'
+// 使用async/await语法糖
 import 'wepy-async-function'
-
+// 网络请求
+import '@/api/index'
 import { setStore } from 'wepy-redux'
 import configStore from './store'
-import components from '@/components/index'
-console.log(components)
 const store = configStore()
 setStore(store)
 
@@ -71,11 +71,29 @@ export default class extends wepy.app {
 
   constructor () {
     super()
+    // 内置两个中间件
+    // 修复小程序请求并发问题
     this.use('requestfix')
+    // 使用wepy.xxx的方式请求小程序原生API都将Promise化
+    this.use('promisify')
+    // 拦截request请求
+    this.intercept('request', {
+      config (p) {
+        return p
+      },
+      success (p) {
+        return p
+      },
+      fail (p) {
+        return p
+      },
+      complete (p) {
+        // console.log('request complete: ', p)
+      }
+    })
   }
 
   onLaunch() {
-    wepy.$components = components
     console.log(wepy)
     this.testAsync()
   }

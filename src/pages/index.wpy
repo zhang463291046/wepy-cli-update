@@ -90,7 +90,7 @@
   import Group from '../components/group'
   import Toast from 'wepy-com-toast'
   import testMixin from '../mixins/test'
-
+  
   console.log('moduleA ignored: ', moduleA) // => moduleA ignored: {}
 
   @connect({
@@ -234,6 +234,12 @@
     }
 
     onLoad() {
+      wepy.$post('/api/mall/discoverList',{
+        page: 1,
+        size: 10
+      }).then(res => {
+        console.log('post', res)
+      })
       let self = this
       this.$parent.getUserInfo(function (userInfo) {
         if (userInfo) {
