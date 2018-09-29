@@ -72,6 +72,8 @@
     </panel>
 
     <panel>
+      <i-button type="ghost">只显示文本</i-button>
+      <i-icon type="group" color="#00B26A" size="40"/>
       <view class="title" slot="title">测试列表</view>
       <list></list>
     </panel>
@@ -107,7 +109,11 @@
 
   export default class Index extends wepy.page {
     config = {
-      navigationBarTitleText: 'test'
+      navigationBarTitleText: 'test',
+      "usingComponents": {
+        "i-button": "/components/button/index",
+        "i-icon": "/components/icon/index",
+      }
     }
     components = {
       panel: Panel,
