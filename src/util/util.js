@@ -1,3 +1,4 @@
+// 获取当前时间,格式20160614134947
 function getCurrentTime() {
   let keep = ''
   let date = new Date()
@@ -9,9 +10,9 @@ function getCurrentTime() {
   let f = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
   let s = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
   keep = y + '' + m + '' + d + '' + h + '' + f + '' + s
-  return keep // 20160614134947
+  return keep
 }
-
+// 获取对象长度
 function objLength(input) {
   let type = toString(input)
   let length = 0

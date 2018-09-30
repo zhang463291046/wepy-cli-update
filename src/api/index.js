@@ -1,7 +1,10 @@
-import wepy from 'wepy';
-import util from './util';
-import md5 from './md5';
-import tip from './tip'
+import wepy from 'wepy'
+// 工具类
+import util from '@/util/util'
+// 加密方式
+import md5 from '@/plugin/wxMd5/md5'
+// 提示框
+import tip from '@/plugin/wxTip/tip'
 // 服务器基础URL
 const baseURL = 'https://sujiefs.com'
 
@@ -22,7 +25,7 @@ wepy.$post = (url, params = {}) => {
       if (response.code == '0') {
         resolve(response)
       } else {
-        tip.success('服务端维护中...')
+        tip.alert('系统维护中...')
       }
     }).catch((error) => {
       tip.loaded();
