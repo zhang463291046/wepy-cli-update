@@ -55,21 +55,19 @@
     </panel>
 
     <panel>
-      <view class="process">
-        新款展示
-        <i class="iconfont icon-next"></i> 生产商品
-        <i class="iconfont icon-xigua"></i> 商品检验
-        <i class="iconfont icon-money"></i> 商品发货
-        <i class="iconfont icon-download"></i> 商品发货
-      </view>
-      <i-button type="ghost">只显示文本</i-button>
-      <i-icon type="group" color="#00B26A" size="40"/>
       <view class="title" slot="title">测试列表</view>
       <list></list>
     </panel>
-
+    
     <toast />
   </view>
+  <i-card title="卡片标题" extra="额外内容" thumb="https://i.loli.net/2017/08/21/599a521472424.jpg">
+    <view slot="content">内容不错</view>
+    <view slot="footer">尾部内容</view>
+  </i-card>
+  <i-button type="ghost">只显示文本</i-button>
+  <i-icon type="group" color="#00B26A" size="40"/>
+  <i class="iconfont icon-xigua"></i> 阿里图标库
 </template>
 
 <script>
@@ -100,9 +98,10 @@
   export default class Index extends wepy.page {
     config = {
       navigationBarTitleText: 'test',
-      "usingComponents": {
-        "i-button": "/components/button/index",
-        "i-icon": "/components/icon/index",
+      usingComponents: {
+        'i-button': '/components/button/index',
+        'i-card': '/components/card/index',
+        'i-icon': '/components/icon/index'
       }
     }
     components = {
@@ -230,7 +229,7 @@
     }
 
     onLoad() {
-      wepy.$post('/api/mall/discoverList',{
+      wepy.$post('/api/mall/discoverList', {
         page: 1,
         size: 10
       }).then(res => {

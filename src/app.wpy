@@ -18,7 +18,8 @@ setStore(store)
 export default class extends wepy.app {
   config = {
     pages: [
-      'pages/index'
+      'pages/index',
+      'pages/ui'
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -53,8 +54,8 @@ export default class extends wepy.app {
         {
           iconPath: 'assets/icon_home.png',
           selectedIconPath: 'assets/icon_home_active.png',
-          pagePath: 'pages/index',
-          text: '首页'
+          pagePath: 'pages/ui',
+          text: 'iViewUI'
         }
       ]
     }
