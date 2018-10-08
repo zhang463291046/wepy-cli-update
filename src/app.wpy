@@ -22,7 +22,9 @@ export default class extends wepy.app {
       'pages/index',
       'pages/icon',
       'pages/ui',
-      'pages/component'
+      'pages/component',
+      'pages/area-demo/area-picker',
+      'pages/area-demo/area-select'
     ],
     window: {
       backgroundTextStyle: 'light',

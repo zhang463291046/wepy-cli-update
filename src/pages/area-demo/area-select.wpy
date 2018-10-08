@@ -1,0 +1,38 @@
+<template>
+  <view class="container">
+    <view>地址选择器area-picker</view>
+    <view>已选择城市: {{city}}</view>
+    <areaSelect @select.user="selectCity"></areaSelect>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import AreaSelect from '@/components/area/area-select'
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: 'area-select'
+    }
+
+    components = {
+      areaSelect: AreaSelect
+    }
+
+    data = {
+      city: ''
+    }
+
+    methods = {
+      selectCity(val){
+        this.city = val
+      }
+    }
+
+    async onLoad () {
+
+    }
+  }
+</script>
+<style lang="less">
+
+</style>
