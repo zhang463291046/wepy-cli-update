@@ -18,8 +18,11 @@ setStore(store)
 export default class extends wepy.app {
   config = {
     pages: [
+      // 'pages/authorize',
       'pages/index',
-      'pages/ui'
+      'pages/icon',
+      'pages/ui',
+      'pages/component'
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -42,20 +45,20 @@ export default class extends wepy.app {
         {
           iconPath: 'assets/icon_home.png',
           selectedIconPath: 'assets/icon_home_active.png',
-          pagePath: 'pages/index',
-          text: '首页'
-        },
-        {
-          iconPath: 'assets/icon_home.png',
-          selectedIconPath: 'assets/icon_home_active.png',
-          pagePath: 'pages/index',
-          text: '首页'
+          pagePath: 'pages/icon',
+          text: '图标库'
         },
         {
           iconPath: 'assets/icon_home.png',
           selectedIconPath: 'assets/icon_home_active.png',
           pagePath: 'pages/ui',
           text: 'iViewUI'
+        },
+        {
+          iconPath: 'assets/icon_home.png',
+          selectedIconPath: 'assets/icon_home_active.png',
+          pagePath: 'pages/component',
+          text: 'wepy组件'
         }
       ]
     }

@@ -8,28 +8,15 @@
     <panel>
       <view class="title" slot="title">测试数据绑定</view>
 
-      <text class="info">{{normalTitle}}</text>
-      <text class="info">{{setTimeoutTitle}}</text>
-      <text class="info">{{mixin}}</text>
-      <text class="info">{{mynum}}</text>
-      <text class="info">{{now}}</text>
-      <text class="info">{{num}}</text>
-      <text class="info">{{asyncNum}}</text>
-      <text class="info">{{sumNum}}</text>
+      <view><text class="info">{{normalTitle}}</text></view>
+      <view><text class="info">{{setTimeoutTitle}}</text></view>
+      <view><text class="info">{{mixin}}</text></view>
+      <view><text class="info">{{mynum}}</text></view>
+      <view><text class="info">{{now}}</text></view>
+      <view><text class="info">{{num}}</text></view>
+      <view><text class="info">{{asyncNum}}</text></view>
+      <view><text class="info">{{sumNum}}</text></view>
       <button @tap="plus('a')" size="mini">  +  </button>
-    </panel>
-
-    <panel>
-      <view class="title" slot="title">其它测试</view>
-      <button @tap="toast" size="mini">第三方组件</button>
-      <button @tap="communicate" size="mini">组件通信</button>
-      <button @tap="tap" size="mini">混合TAP事件</button>
-    </panel>
-
-    <panel>
-      <view class="title" slot="title">测试并发网络请求</view>
-      <view>返回结果: <text>{{netrst}}</text></view>
-      <button @tap="request" size="mini"> 点我发起10个请求 </button>
     </panel>
 
     <panel>
@@ -48,6 +35,25 @@
     </panel>
 
     <panel>
+      <view class="title" slot="title">其它测试</view>
+      <button @tap="toast" size="mini">第三方组件</button>
+      <button @tap="communicate" size="mini">组件通信</button>
+      <button @tap="tap" size="mini">混合TAP事件</button>
+    </panel>
+    
+    <panel>
+      <view class="title" slot="title">测试网络请求</view>
+      <button @tap="request" size="mini">发起请求</button>
+      <view>返回结果: <text>{{netrst}}</text></view>
+    </panel>
+
+    <panel>
+      <view class="title" slot="title">测试并发网络请求</view>
+      <button @tap="request2" size="mini"> 点我发起10个请求 </button>
+      <view>返回结果: <text>{{netrst}}</text></view>
+    </panel>
+
+    <panel>
       <view class="title" slot="title">测试组件Repeat</view>
       <repeat for="{{groupList}}" index="index" item="item" key="key">
         <group :grouplist="item" :indexa="index"></group>
@@ -61,13 +67,6 @@
     
     <toast />
   </view>
-  <i-card title="卡片标题" extra="额外内容" thumb="https://i.loli.net/2017/08/21/599a521472424.jpg">
-    <view slot="content">内容不错</view>
-    <view slot="footer">尾部内容</view>
-  </i-card>
-  <i-button type="ghost">只显示文本</i-button>
-  <i-icon type="group" color="#00B26A" size="40"/>
-  <i class="iconfont icon-xigua"></i> 阿里图标库
 </template>
 
 <script>
@@ -97,12 +96,7 @@
 
   export default class Index extends wepy.page {
     config = {
-      navigationBarTitleText: 'test',
-      usingComponents: {
-        'i-button': '/components/button/index',
-        'i-card': '/components/card/index',
-        'i-icon': '/components/icon/index'
-      }
+      navigationBarTitleText: '首页'
     }
     components = {
       panel: Panel,
@@ -177,6 +171,9 @@
     }
 
     methods = {
+      handleViewTap (e) {
+        console.log(e)
+      },
       plus () {
         this.mynum++
       },
@@ -185,23 +182,29 @@
           title: '自定义标题',
           img: 'https://raw.githubusercontent.com/kiinlam/wetoast/master/images/star.png'
         })
-
         promise.then((d) => {
           console.log('toast done')
         })
       },
+      communicate () {
+        console.log(this.$name + ' tap')
+        this.$invoke('counter1', 'plus', 45, 6)
+        this.$invoke('counter2', 'minus', 45, 6)
+        this.$broadcast('index-broadcast', 1, 3, 4)
+      },
       tap () {
         console.log('do noting from ' + this.$name)
       },
-      communicate () {
-        console.log(this.$name + ' tap')
-
-        this.$invoke('counter2', 'minus', 45, 6)
-        this.$invoke('counter1', 'plus', 45, 6)
-
-        this.$broadcast('index-broadcast', 1, 3, 4)
-      },
       request () {
+        wepy.$post('/api/mall/discoverList', {
+          page: 1,
+          size: 10
+        }).then(res => {
+          console.log('post', res)
+          this.netrst = res
+        })
+      },
+      request2 () {
         let self = this
         let i = 10
         let map = ['MA==', 'MQo=', 'Mg==', 'Mw==', 'NA==', 'NQ==', 'Ng==', 'Nw==', 'OA==', 'OQ==']
@@ -229,12 +232,6 @@
     }
 
     onLoad() {
-      wepy.$post('/api/mall/discoverList', {
-        page: 1,
-        size: 10
-      }).then(res => {
-        console.log('post', res)
-      })
       let self = this
       this.$parent.getUserInfo(function (userInfo) {
         if (userInfo) {

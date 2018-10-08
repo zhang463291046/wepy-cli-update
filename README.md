@@ -32,6 +32,7 @@ iconfont文件样式用css,需要修改成less,建议用远程服务器  <font c
 │   ├── api                  // API网络请求
 │   ├── assets               // 图片资源
 │   ├── components           // 自定义组件
+│   ├── iview                // UI组件
 │   ├── mixin                // 工具函数
 │   ├── pages                // 生产页面结构目录
 │   ├── plugin               // 第三方插件库JS

@@ -1,0 +1,61 @@
+<template>
+  <view class="container">
+    <view>地址选择器组件</view>
+    <view @tap="openAddressPicker">{{province ? province.name : '省'}} - {{city ? city.name : '市' }} - {{area ? area.name : '区' }}</view>
+    <areaPicker @areaArray.user="areaPickerArray"></areaPicker>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import AreaPicker from "@/components/area-picker/area-picker"
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '组件库'
+    }
+
+    components = {
+      areaPicker: AreaPicker
+    }
+
+    data = {
+      province: '',
+      city: '',
+      area: '',
+      provinceCode: '',
+      cityCode: '',
+      areaCode: ''
+    }
+
+    computed = {
+
+    }
+
+    methods = {
+      openAddressPicker() {
+        this.$invoke('areaPicker', 'openAddressPicker');
+      },
+      areaPickerArray(province, city, area) {
+        console.log(province, city, area)
+        this.province = province;
+        this.city = city;
+        this.area = area;
+        this.provinceCode = province.code;
+        this.cityCode = city.code;
+        this.areaCode = area.code;
+        this.$apply();
+      }
+    }
+
+    events = {
+
+    }
+
+    onLoad() {
+
+    }
+  }
+</script>
+<style lang="less">
+  
+</style>
