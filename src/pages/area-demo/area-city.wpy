@@ -1,28 +1,28 @@
 <template>
   <view class="container">
-    <areaSelect @select.user="selectCity"></areaSelect>
+    <areaCity @select.user="selectCity"></areaCity>
   </view>
 </template>
 
 <script>
   import wepy from 'wepy'
-  import AreaSelect from '@/components/area/area-select'
+  import AreaCity from '@/components/area/area-city'
   export default class Index extends wepy.page {
     config = {
-      navigationBarTitleText: 'area-select'
+      navigationBarTitleText: 'area-city'
     }
 
     components = {
-      areaSelect: AreaSelect
+      areaCity: AreaCity
     }
 
     data = {
-
+      city: ''
     }
 
     methods = {
       selectCity(val){
-        console.log(val)
+        this.city = val
       }
     }
 

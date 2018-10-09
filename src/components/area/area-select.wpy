@@ -76,8 +76,9 @@
 </template>
 <script>
 import wepy from 'wepy'
+// 城市列表
 import citys from './selectData.js'
-// 设置热门城市
+// 设置热门城市Code
 const hotCode = ['110100', '310000', '440100', '440300', '330100', '320100']
 
 export default class AreaSelect extends wepy.component {
@@ -99,7 +100,6 @@ export default class AreaSelect extends wepy.component {
     searchResult: []
   }
   methods = {
-    
     onListTouchStart ({ currentTarget, touches }) {
       const letter = currentTarget.dataset.letter
       this.onLetterTaped(letter)
@@ -137,19 +137,18 @@ export default class AreaSelect extends wepy.component {
     },
     hideSearchResult () {
       this.showSearch = false
-      // this.searchResult = []
-      // this.$apply()
     },
+    // 搜索功能
     onInput ({ detail: { value } }) {
       if (!value.trim()) {
         return []
       }
       const reg = new RegExp(value, 'ig')
-      // console.log(value)
       this.searchResult = citys.filter(i => {
         return reg.test(i.name) || reg.test(i.search)
       })
     },
+    // 已选择城市
     onSelected (item) {
       console.log('已选择城市', item)
       wx.showToast({
@@ -157,6 +156,7 @@ export default class AreaSelect extends wepy.component {
       })
       this.$emit('select', item.name)
     },
+    // 已选择定位的城市
     onLocationTaped () {
       if (!this.location.trim()) {
         return
@@ -174,6 +174,7 @@ export default class AreaSelect extends wepy.component {
     wx.showLoading({
       title: '加载中'
     })
+    // 定位功能
     try {
        const location = await this.getLocation()
        const ret = await this.getCityNameFromBaidu(location.latitude, location.longitude)

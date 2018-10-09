@@ -2,6 +2,7 @@
   <view class="container">
     <view><navigator url="/pages/area-demo/area-picker" hover-class="navigator-hover">地址选择器area-picker</navigator></view>
     <view><navigator url="/pages/area-demo/area-select" hover-class="navigator-hover">地址选择器area-select</navigator></view>
+    <view><navigator url="/pages/area-demo/area-city" hover-class="navigator-hover">地址选择器area-city</navigator></view>
   </view>
 </template>
 
