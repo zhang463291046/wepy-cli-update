@@ -1,48 +1,21 @@
 <style lang="less" scoped>
-.expandToFull {
-  -webkit-animation-duration: 1s;
-  animation-duration: 1s;
-  -webkit-animation-fill-mode: both;
-  animation-fill-mode: both;
-  -webkit-animation-name: expandToFull;
-  animation-name: expandToFull;
-}
-@-webkit-keyframes expandToFull {
-  from {
-    width:180rpx
-  }
-
-  to {
-    width:580rpx
-  }
-}
-
-@keyframes expandToFull {
-  from {
-    width:180rpx
-  }
-
-  to {
-    width:580rpx
-  }
-}
 .icityer{
   width:100vw;
   height:100vh;
   box-sizing:border-box;
-  padding:280rpx 10rpx 10rpx 10rpx;
+  padding:100rpx 10rpx 10rpx 10rpx;
   position:absolute;
   z-index:10000;
   top:0;
   left:0;
   overflow:hidden;
   background:#fff;
+  // 城市列表
   .container{
-    width: auto;
-    margin:0 50rpx;
+    width: 100vw;
     height:100%;
     box-sizing:border-box;
-    padding:0 80rpx 0 0;
+    padding:0 130rpx 0 50rpx;
     .types{
       .provinces{
         .province{
@@ -72,6 +45,7 @@
       }
     }
   }
+  // 右侧快速导航栏
   .nav_quick_tool{
     position:fixed;
     z-index:1000;
@@ -99,37 +73,56 @@
       }
     }
   }
+  // 搜索图标
   .search-icon{
     position:absolute;
-    width:80rpx;
+    width:580rpx;
     height:80rpx;
     background:#eee;
-    top:180rpx;
+    top:10rpx;
     left:60rpx;
     border-radius:40rpx;
     overflow:hidden;
     display:flex;
-    image{
+    .icon{
       width:70rpx;
       height:70rpx;
       margin:5rpx;
+      text-align: center;
+      font-size: 28px;
     }
-    input{
+    .input{
       flex:1;
       height:80rpx;
       line-height:80rpx;
       font-size:30rpx;
-
+      padding-left:40rpx
     }
   }
-  .search-result{
-    width:100vw;
-    height: 80%;
-    box-sizing:border-box;
+  // 关闭搜索
+  .close-icon{
     position:absolute;
-    z-index:10001;
-    bottom: 0;
-    left:0;
+    width:80rpx;
+    height:80rpx;
+    top:10rpx;
+    right:30rpx;
+    border-radius:40rpx;
+    overflow:hidden;
+    display:flex;
+    .icon{
+      width:70rpx;
+      height:70rpx;
+      margin:5rpx;
+      text-align: center;
+      font-size: 30px;
+    }
+  }
+  // 搜索结果
+  .search-result{
+    width: 100vw;
+    height: 100%;
+    box-sizing:border-box;
+    padding:0 130rpx 0 0;
     overflow-x:hidden;
     overflow-y:scroll;
     background:#fff;
@@ -150,14 +143,28 @@
 </style>
 <template>
   <view wx:if="{{show}}" class="icityer">
+    <!-- 悬浮搜索图标 -->
+    <view class="search-icon">
+      <input type="" name="" class="input" placeholder="请输入省、市、区" bindinput="getSearchText"></input>
+      <icon type="search" class="icon" @tap.stop="showSearchInput"/>
+    </view>
+    <view class="close-icon">
+      <icon type="clear" class="icon" size="30" @tap.stop="hideSearchInput"/>
+    </view>
+    <!-- 搜索结果 -->
+    <view wx:if="{{expandSearchInput}}" class="search-result">
+      <view class="search-option" wx:for="{{searchData}}" wx:for-item="item" data-province="{{item.province}}" data-city="{{item.city}}" data-area="{{item.area}}" @tap.stop="onSelected">
+        {{item.area}}-{{item.city}}-{{item.province}}
+      </view>
+    </view>
     <!-- 省市区主体 -->
-    <scroll-view class="container" scroll-y scroll-into-view="{{quick_flag}}" scroll-with-animation="true" enable-back-to-top="true" @scroll.stop="scrollEvent" >
+    <scroll-view class="container" scroll-y scroll-into-view="{{quickFlag}}" scroll-with-animation="true" enable-back-to-top="true" @scroll.stop="scrollEvent" >
       <view class="types" wx:for="{{navs}}" wx:for-item="nav" wx:if="{{DataSort[nav]}}"  wx:key="t{{index}}" id="{{nav}}">
         <view class="provinces" wx:for="{{DataSort[nav]}}" wx:for-item="provinces" wx:key="p{{index}}">
           <view class="province">{{provinces.name}}</view>
           <view class="citys" wx:for="{{provinces.citys}}" wx:for-item="citys" wx:key="c{{index}}">
             <view wx:if="{{provinces.name !== citys.name}}" class="city">{{citys.name}}</view>
-            <view class="areas" wx:for="{{citys.areas}}" wx:for-item="areas" wx:key="a{{index}}" data-province="{{provinces.name}}" data-city="{{citys.name}}" data-area="{{areas}}" @tap.stop="getCity">{{areas}}</view>
+            <view class="areas" wx:for="{{citys.areas}}" wx:for-item="areas" wx:key="a{{index}}" data-province="{{provinces.name}}" data-city="{{citys.name}}" data-area="{{areas}}" @tap.stop="onSelected">{{areas}}</view>
           </view>
         </view>
       </view>
@@ -165,25 +172,14 @@
     <!-- 右侧快速导航栏 -->
     <view class="nav_quick_tool">
       <view class="nav_quick" wx:for="{{navs}}" wx:for-item="nav" wx:key="n{{index}}" data-nav="{{nav}}" @tap.stop="quickTo">
-        <text wx:if="{{DataSort[nav]}}" class="nav {{nav===nav_flag?'active':''}}">{{nav}}</text>
-      </view>
-    </view>
-    <!-- 悬浮搜索图标 -->
-    <view class="search-icon {{expandSearchInput?'expandToFull':''}}" @tap.stop="showSearchInput">
-      <image src="./icon/search.png"></image>
-      <input type="" name="" placeholder="请输入省市区" bindinput="getSearchText"></input>
-    </view>
-    <!-- 搜索结果 -->
-    <view wx:if="{{expandSearchInput}}" class="search-result">
-      <view class="search-option" wx:for="{{searchData}}" wx:for-item="item" data-province="{{item.province}}" data-city="{{item.city}}" data-area="{{item.area}}" @tap.stop="getCity">
-        {{item.area}}-{{item.city}}-{{item.province}}
+        <text wx:if="{{DataSort[nav]}}" class="nav {{nav===navFlag?'active':''}}">{{nav}}</text>
       </view>
     </view>
   </view>
 </template>
 <script>
   import wepy from 'wepy'
-  import { CITYSDATA } from './cityData'
+  import cityData from './cityData'
   export default class AreaCity extends wepy.component {
     props = {
       show: {
@@ -191,33 +187,89 @@
         default: true
       }
     }
+
+    data = {
+      quickFlag: 'A',
+      navFlag: 'A',
+      navs: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
+      cityData: cityData,
+      expandSearchInput: false,
+      searchText: '',
+      searchData: []
+    }
+
     computed = {
+      // 处理省列表数据,进行按照字母分组
       DataSort: function () {
         let _data = {}
-        for (let i in this.CITYSDATA) {
-          if (!_data[this.CITYSDATA[i].key]) {
-            _data[this.CITYSDATA[i].key] = [this.CITYSDATA[i]]
+        for (let i in this.cityData) {
+          if (!_data[this.cityData[i].key]) {
+            _data[this.cityData[i].key] = [this.cityData[i]]
           } else {
-            _data[this.CITYSDATA[i].key].push(this.CITYSDATA[i])
+            _data[this.cityData[i].key].push(this.cityData[i])
           }
         }
+        console.log(_data)
         return _data
       }
     }
 
     watch = {
+
     }
-    data = {
-      'quick_flag': 'A',
-      'nav_flag': 'A',
-      'navs': ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
-      CITYSDATA,
-      expandSearchInput: false,
-      searchData: []
+    
+    methods = {
+      // 已选择城市
+      onSelected: function (e) {
+        let _province = e.currentTarget.dataset.province
+        let _city = e.currentTarget.dataset.city
+        let _area = e.currentTarget.dataset.area
+        this.expandSearchInput = false
+        wx.showToast({
+          title: _area
+        })
+        this.$emit('select', {
+          province: _province,
+          city: _city,
+          area: _area
+        })
+      },
+      // 左侧滑动关联右侧关系
+      scrollEvent: function () {
+        this.getTopToNav()
+      },
+      // 右侧快速导航栏
+      quickTo: function (e) {
+        let _id = e.currentTarget.dataset.nav
+        this.quickFlag = this.navFlag = _id
+      },
+      // 关闭隐藏
+      hideSearchInput: function () {
+        this.expandSearchInput = false
+      },
+      // 点击搜索
+      showSearchInput: function () {
+        if (this.searchText==='') {
+          wx.showToast({
+            title: '请输入省、市、区'
+          })
+          return
+        }
+        this.expandSearchInput = true
+        this.pushSearchCityData(this.searchText)
+      },
+      // 关键字
+      getSearchText: function (e) {
+        let searchText = e.detail.value.trim()
+        this.searchText = searchText;
+      }
     }
+
     onLoad() {
+
     }
-    _getTopToNav () {
+    // 左侧滑动关联右侧关系
+    getTopToNav () {
       let self = this
       let _navs = this.navs
       let _index = 0
@@ -241,14 +293,14 @@
             _index++
             _setActiveFlag()
           } else {
-            self.nav_flag = _navs[_index]
-            self.$apply()
+            self.navFlag = _navs[_index]
           }
         })
       }
       _setActiveFlag()
     }
-    _pushAllCity (province, city) {
+    // 输入省,返回所有城市,所有区
+    pushAllCity (province, city) {
       let _searchCityData = []
       for (let i in city) {
         let _city = city[i].name
@@ -263,7 +315,8 @@
       }
       return _searchCityData
     }
-    _pushAllArea (province, city, area) {
+    // 输入市,返回所有区
+    pushAllArea (province, city, area) {
       let _searchCityData = []
       for (let i in area) {
         _searchCityData.push({
@@ -274,26 +327,30 @@
       }
       return _searchCityData
     }
-    _pushSearchCityData (searchText) {
+    // 搜索结果
+    pushSearchCityData (searchText) {
       let _searchCityData = []
-      for (let i in this.CITYSDATA) {
+      for (let i in this.cityData) {
         if (_searchCityData.length > 30) {
           break
         }
-        let _province = this.CITYSDATA[i].name
+        // 输入省
+        let _province = this.cityData[i].name
         if (_province.indexOf(searchText)!==-1) {
-          _searchCityData = _searchCityData.concat(this._pushAllCity(_province, this.CITYSDATA[i].citys))
+          _searchCityData = _searchCityData.concat(this.pushAllCity(_province, this.cityData[i].citys))
           continue
         }
-        let _citys = this.CITYSDATA[i].citys
+        let _citys = this.cityData[i].citys
         for (let j in _citys) {
+          // 输入市
           let _city = _citys[j].name
           if (_city.indexOf(searchText)!==-1) {
-            _searchCityData = _searchCityData.concat(this._pushAllArea(_province, _city, _citys[j].areas))
+            _searchCityData = _searchCityData.concat(this.pushAllArea(_province, _city, _citys[j].areas))
             continue
           }
           let _areas = _citys[j].areas
           for (let k in _areas) {
+            // 输入区
             let _area = _areas[k]
             if (_area.indexOf(searchText)!==-1) {
               _searchCityData.push({
@@ -306,43 +363,6 @@
         }
       }
       this.searchData = _searchCityData
-      this.$apply()
-    }
-    methods = {
-      getCity: function (e) {
-        let _province = e.currentTarget.dataset.province
-        let _city = e.currentTarget.dataset.city
-        let _area = e.currentTarget.dataset.area
-        this.expandSearchInput = false
-        this.$apply()
-        this.$emit('choose', {
-          province: _province,
-          city: _city,
-          area: _area
-        })
-      },
-      scrollEvent: function () {
-        // 暂时取消左侧滑动关联右侧关系
-        this._getTopToNav()
-        // this.$apply()
-      },
-      quickTo: function (e) {
-        let _id = e.currentTarget.dataset.nav
-        this.quick_flag = this.nav_flag = _id
-        this.$apply()
-      },
-      showSearchInput: function () {
-        this.expandSearchInput = true
-        this.$apply()
-      },
-
-      getSearchText: function (e) {
-        let _searchText = e.detail.value.trim()
-        if (_searchText==='') {
-          return
-        }
-        this._pushSearchCityData(_searchText)
-      }
     }
   }
 </script>

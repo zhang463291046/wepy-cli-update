@@ -17,12 +17,12 @@
     }
 
     data = {
-      city: ''
+      
     }
 
     methods = {
       selectCity(val){
-        this.city = val
+        console.log(val)
       }
     }
 

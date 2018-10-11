@@ -2,7 +2,7 @@
 ** 中国省市区数据
 */
 
-module.exports.CITYSDATA = [
+export default [
   {
     "key": "B",
     "name": "北京市",
