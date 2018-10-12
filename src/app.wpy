@@ -25,7 +25,8 @@ export default class extends wepy.app {
       'pages/component',
       'pages/area-demo/area-picker',
       'pages/area-demo/area-select',
-      'pages/area-demo/area-city'
+      'pages/area-demo/area-city',
+      'pages/calendar-demo/calendar'
     ],
     window: {
       backgroundTextStyle: 'light',

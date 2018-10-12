@@ -1,0 +1,45 @@
+<template>
+  <view class="container">
+    <calendar 
+        :currentDate.sync="currentDate"
+        :startDate.sync="startDate"
+        :endDate.sync="endDate"
+        :hasIconList.sync="hasIconList"
+        :moduleId.sync="'step1Canlendar'"
+    ></calendar>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import Calendar from '@/components/calendar/calendar'
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: 'area-city'
+    }
+
+    components = {
+      calendar: Calendar
+    }
+
+    data = {
+      currentDate: "2018-08-09",
+      startDate: '2018-01-01',
+      endDate: '2018-02-01',
+      hasIconList:[ '2018-06-01', '2018-06-06', '2018-06-09', '2018-06-10', '2018-06-15' ]
+    }
+
+    methods = {
+      selectCity(val){
+        console.log(val)
+      }
+    }
+
+    async onLoad () {
+      this.$broadcast("startRenderCalendar");//通知日历组件可以开始渲染
+    }
+  }
+</script>
+<style lang="less">
+
+</style>
