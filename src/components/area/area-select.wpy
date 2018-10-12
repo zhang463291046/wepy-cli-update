@@ -1,77 +1,51 @@
+<!-- 选择市级插件 -->
 <template>
   <view class="main">
-    <!-- 搜索框 -->
-    <view class="search-bar">
-      <input type="text" 
-            class="search"
-            @focus="onFocus()"
-            @input="onInput({{$event}})"
-            confirm-type="search"
-            placeholder="搜索" />
-      <text wx:if="{{showSearch}}" 
-            class="search-cancel"
-            @tap="hideSearchResult()">取消</text>
+    <!-- 悬浮搜索图标 -->
+    <view class="search-icon">
+      <input value="{{searchText}}" type="" class="input" @input="getSearchText" confirm-type="search" placeholder="请输入市" />
+      <icon type="search" class="icon" @tap.stop="showSearchInput"/>
+    </view>
+    <view class="close-icon">
+      <icon type="clear" class="icon" size="30" @tap.stop="hideSearchInput"/>
     </view>
     <!-- 搜索结果 -->
-    <view wx:if="{{showSearch}}" 
-          class="mask" 
-          style="height: calc(100vh - 40px)">
-      <scroll-view wx:if="{{searchResult.length}}" 
-                   style="height: 100%; width: 100%; background-color: white"
-                   scroll-y>
+    <view wx:if="{{showSearch}}" class="search-result" style="height: calc(100vh - 40px)">
+      <scroll-view wx:if="{{searchResult.length}}" style="height: 100%; width: 100%; background-color: white" scroll-y>
         <repeat for="{{searchResult}}">
-          <view class="city-item"
-                @tap="onSelected({{item}})">
-            {{ item.name }}
-          </view>
+          <view class="city-item" @tap="onSelected({{item}})">{{ item.name }}</view>
         </repeat>
       </scroll-view>
     </view>
-    <!-- 列表 -->
-    <scroll-view class="fit scroll"
-                 scroll-y
-                 scroll-into-view="{{scrollIntoId}}">
-      <view id="top" 
-            class="city-letter">当前定位城市：</view>
-      <view wx:if="{{locationFail}}" 
-            class="city-item">定位失败</view>
-      <view wx:else 
-            class="city-item"
-            @tap="onLocationTaped()">
-        {{ location ? location : '定位中...' }}
-      </view>
+    <!-- 市主体 -->
+    <scroll-view class="container" scroll-y scroll-into-view="{{scrollIntoId}}">
+      <!-- 定位城市 -->
+      <view id="top" class="city-letter">当前定位城市：</view>
+      <view wx:if="{{locationFail}}" class="city-item">定位失败</view>
+      <view wx:else class="city-item" @tap="onLocationTaped()">{{ location ? location : '定位中...' }}</view>
+      <!-- 热门城市 -->
       <view class="city-letter">热门城市</view>
       <repeat for="{{hotCitys}}" >
-        <view class="city-item"
-              @tap="onSelected({{item}})">
-          {{item.name}}
-        </view>
+        <view class="city-item" @tap="onSelected({{item}})">{{item.name}}</view>
       </repeat>
-
-      <repeat for="{{citys}}" 
-              key="letter.letter" 
-              item="letter">
+      <!-- 市列表 -->
+      <repeat for="{{citys}}" key="letter.letter" item="letter">
         <view>
           <view class="city-letter" id="{{letter.letter}}">{{ letter.letter }}</view>
-          <repeat for="{{letter.cityInfo}}" 
-                  key="city.id" 
-                  item="city">
-            <view class="city-item"
-                  @tap="onSelected({{city}})">{{ city.name }}</view>
+          <repeat for="{{letter.cityInfo}}" key="city.id" item="city">
+            <view class="city-item" @tap="onSelected({{city}})">{{ city.name }}</view>
           </repeat>
         </view>
       </repeat>
-      <view class="index-list">
-        <repeat for="{{letters}}">
-          <view class="index-list-item"
-                data-letter="{{item}}"
-                @touchstart.stop="onListTouchStart"
-                @touchmove.stop="onListTouchMove"
-                @touchend.stop="onListTouchEnd">{{ item }}</view>
-        </repeat>
-      </view>
-      <view wx:if="{{currentLetter}}" class="letter-notify">{{ currentLetter }}</view>
     </scroll-view>
+    <!-- 右侧快速导航栏 -->
+    <view class="index-list">
+      <repeat for="{{letters}}">
+        <view class="index-list-item" data-letter="{{item}}" @touchstart.stop="onListTouchStart" @touchmove.stop="onListTouchMove" @touchend.stop="onListTouchEnd">{{ item }}</view>
+      </repeat>
+    </view>
+    <!-- 提示字母 -->
+    <view wx:if="{{currentLetter}}" class="letter-notify">{{ currentLetter }}</view>
   </view>
 </template>
 <script>
@@ -82,9 +56,13 @@ import citys from './selectData.js'
 const hotCode = ['110100', '310000', '440100', '440300', '330100', '320100']
 
 export default class AreaSelect extends wepy.component {
-  config = {
-    navigationBarTitleText: '选择城市'
+  props = {
+    show: {
+      type: Boolean,
+      default: true
+    }
   }
+
   data = {
     citys: [],
     hotCitys: [],
@@ -97,8 +75,10 @@ export default class AreaSelect extends wepy.component {
     startPageY: 0,
     timer: null,
     showSearch: false,
+    searchText: '',
     searchResult: []
   }
+
   methods = {
     onListTouchStart ({ currentTarget, touches }) {
       const letter = currentTarget.dataset.letter
@@ -132,36 +112,53 @@ export default class AreaSelect extends wepy.component {
         this.$apply()
       }, 750)
     },
-    onFocus() {
-      this.showSearch = true
-    },
-    hideSearchResult () {
+    // 关闭隐藏
+    hideSearchInput: function () {
+      this.searchText = '';
       this.showSearch = false
     },
-    // 搜索功能
-    onInput ({ detail: { value } }) {
-      if (!value.trim()) {
-        return []
+    // 点击搜索
+    showSearchInput: function () {
+      if (this.searchText==='') {
+        wx.showToast({
+          title: '请输入关键字'
+        })
+        return
       }
-      const reg = new RegExp(value, 'ig')
-      this.searchResult = citys.filter(i => {
-        return reg.test(i.name) || reg.test(i.search)
-      })
+      this.showSearch = true
+      this.searchCityData(this.searchText)
     },
-    // 已选择城市
+    // 关键字
+    getSearchText (e) {
+      let searchText = e.detail.value.trim()
+      this.searchText = searchText;
+    },
+    // 选择城市
     onSelected (item) {
-      console.log('已选择城市', item)
-      wx.showToast({
-        title: item.name
+      const self = this
+      let _city = item.name
+      wx.showModal({
+        title: '您选择的城市',
+        content: _city,
+        success: function (res) {
+          // 确定
+          if(res.confirm){
+            self.$emit('select', item)
+            self.showSearch = false
+            self.$apply()
+          }
+          // 取消
+          if(res.cancel){
+
+          }
+        }
       })
-      this.$emit('select', item.name)
     },
-    // 已选择定位的城市
+    // 选择定位的城市
     onLocationTaped () {
       if (!this.location.trim()) {
         return
       }
-      console.log('已选择定位的城市', this.location)
       wx.showToast({
         title: this.location
       })
@@ -186,6 +183,15 @@ export default class AreaSelect extends wepy.component {
      } finally {
        wx.hideLoading()
      }
+  }
+  // 搜索结果
+  searchCityData (searchText) {
+    const reg = new RegExp(searchText, 'ig')
+    const _searchCityData = citys.filter(i => {
+      return reg.test(i.name) || reg.test(i.search)
+    })
+    this.searchResult = _searchCityData
+    console.log(this.searchResult)
   }
   // 获取经纬度
   getLocation () {
@@ -245,111 +251,155 @@ export default class AreaSelect extends wepy.component {
 </script>
 <style lang="less">
 .main {
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  flex-direction: column;
-}
-.search-bar {
-  height: 40px;
-  display: flex;
-  flex-direction: row;
-}
-.search {
-  flex: 1;
-  width: 0;
-  height: 40px;
-  padding: 0 10px;
-  border-bottom: 1px solid #ddd;
-  background-color: white;
-  box-sizing: border-box;
-}
-.search-cancel {
-  color: #666;
-  line-height: 40px;
-  padding: 0 8px;
-  font-size: 14px;
-}
-.mask {
-  // height: 100vh;
-  width: 100vw;
-  background-color: rgba(0, 0, 0, .7);
-  position: fixed;
-  top: 40px;
-  left: 0;
-  z-index: 1;
-}
-.scroll {
-  flex: 1;
-  height: 0;
-  width: 100%; 
-  background-color: #eee
-}
-.city-letter {
-  text-indent: 28px;
-  height: 30px;
-  line-height: 30px;
-}
-.city-item {
-  height: 50px;
-  line-height: 50px;
-  background-color: white;
-  text-indent: 28px;
-  font-size: 14px;
-  position: relative;
-  &::after {
-    content: ' ';
-    display: block;
-    height: 1px;
-    width: 90%;
-    position: absolute;
-    left: 5%;
-    bottom: 0;
-    background-color: #DDD;
-    transform: scaleY(.5)
+  width:100vw;
+  height:100vh;
+  box-sizing:border-box;
+  padding:100rpx 10rpx 10rpx 10rpx;
+  position:absolute;
+  z-index:10000;
+  top:0;
+  left:0;
+  overflow:hidden;
+  background:#fff;
+  // 城市列表
+  .container{
+    width: 100vw;
+    height:100%;
+    box-sizing:border-box;
+    .city-letter {
+      text-indent: 28px;
+      height: 30px;
+      line-height: 30px;
+      background-color: #eee
+    }
+    .city-item {
+      height: 50px;
+      line-height: 50px;
+      background-color: white;
+      text-indent: 28px;
+      font-size: 14px;
+      position: relative;
+      &::after {
+        content: ' ';
+        display: block;
+        height: 1px;
+        width: 90%;
+        position: absolute;
+        left: 5%;
+        bottom: 0;
+        background-color: #DDD;
+        transform: scaleY(.5)
+      }
+      &:active {
+        opacity: .7;
+      }
+    } 
   }
-  &:active {
-    opacity: .7;
+  // 右侧快速导航栏
+  .index-list {
+    position: fixed;
+    width: 40rpx;
+    right: 10rpx;
+    bottom: 60rpx;
+    .index-list-item {
+      width: 100%;
+      height: 40rpx;
+      font-size: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
   }
-}
-.index-list {
-  height: 414px;
-  width: 30px;
-  // background-color: red;
-  position: fixed;
-  right: 0px;
-  top: 50%;
-  margin-top: -187px;
-  // top: calc(10vh + 40px);
-  display: flex;
-  flex-direction: column;
-}
-.index-list-item {
-  width: 100%;
-  // flex: 1;
-  height: 10px;
-  line-height: 2;
-  font-size: 12px;
-  display: flex;
-  padding-left: 5px;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  justify-content: center;
-  align-items: center;
-}
-.letter-notify {
-  height: 80px;
-  width: 80px;
-  background-color: rgba(0, 0, 0, .7);
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  margin-top: -40px;
-  margin-left: -40px;
-  border-radius: 5px;
-  color: white;
-  line-height: 80px;
-  font-size: 50px;
-  text-align: center;
+  // 搜索图标
+  .search-icon{
+    position:absolute;
+    width:580rpx;
+    height:80rpx;
+    background:#eee;
+    top:10rpx;
+    left:60rpx;
+    border-radius:40rpx;
+    overflow:hidden;
+    display:flex;
+    .icon{
+      width:70rpx;
+      height:70rpx;
+      margin:5rpx;
+      text-align: center;
+      font-size: 28px;
+    }
+    .input{
+      flex:1;
+      height:80rpx;
+      line-height:80rpx;
+      font-size:30rpx;
+      padding-left:40rpx
+    }
+  }
+  // 关闭搜索
+  .close-icon{
+    position:absolute;
+    width:80rpx;
+    height:80rpx;
+    top:10rpx;
+    right:30rpx;
+    border-radius:40rpx;
+    overflow:hidden;
+    display:flex;
+    .icon{
+      width:70rpx;
+      height:70rpx;
+      margin:5rpx;
+      text-align: center;
+      font-size: 30px;
+    }
+  }
+  // 搜索结果
+  .search-result {
+    width: 100vw;
+    height: 100%;
+    box-sizing:border-box;
+    overflow-x:hidden;
+    overflow-y:scroll;
+    background:#fff;
+    .city-item {
+      height: 50px;
+      line-height: 50px;
+      background-color: white;
+      text-indent: 28px;
+      font-size: 14px;
+      position: relative;
+      &::after {
+        content: ' ';
+        display: block;
+        height: 1px;
+        width: 90%;
+        position: absolute;
+        left: 5%;
+        bottom: 0;
+        background-color: #DDD;
+        transform: scaleY(.5)
+      }
+      &:active {
+        opacity: .7;
+      }
+    }
+  }
+  // 字母提示
+  .letter-notify {
+    height: 80px;
+    width: 80px;
+    background-color: rgba(0, 0, 0, .7);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -40px;
+    margin-left: -40px;
+    border-radius: 5px;
+    color: white;
+    line-height: 80px;
+    font-size: 50px;
+    text-align: center;
+  }
 }
 </style>

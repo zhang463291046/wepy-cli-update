@@ -1,6 +1,8 @@
+/*
+** 中国市级数据
+*/
 export default [{
-    "name":
-    "北京市",
+    "name": "北京市",
     "letter": "B",
     "search": "北京市beijingshi",
     "code": "110100"

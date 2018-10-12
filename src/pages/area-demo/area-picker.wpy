@@ -1,6 +1,5 @@
 <template>
   <view class="container">
-    <view>地址选择器area-picker</view>
     <view @tap="openAddressPicker">{{province ? province.name : '省'}} - {{city ? city.name : '市' }} - {{area ? area.name : '区' }}</view>
     <areaPicker @areaArray.user="areaPickerArray"></areaPicker>
   </view>

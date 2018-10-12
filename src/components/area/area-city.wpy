@@ -1,159 +1,17 @@
-<style lang="less" scoped>
-.icityer{
-  width:100vw;
-  height:100vh;
-  box-sizing:border-box;
-  padding:100rpx 10rpx 10rpx 10rpx;
-  position:absolute;
-  z-index:10000;
-  top:0;
-  left:0;
-  overflow:hidden;
-  background:#fff;
-  // 城市列表
-  .container{
-    width: 100vw;
-    height:100%;
-    box-sizing:border-box;
-    padding:0 130rpx 0 50rpx;
-    .types{
-      .provinces{
-        .province{
-          font-size:42rpx;
-          font-weight:600;
-          padding:5rpx 15rpx;
-          text-align:right;
-          border-bottom:1rpx solid #898989;
-        }
-        .citys{
-          .city{
-            font-size:36rpx;
-            font-weight:300;
-            padding:5rpx 0;
-            margin:5rpx 0;
-          }
-        }
-        .areas{
-          display:inline-block;
-          padding:10rpx 20rpx;
-          margin:10rpx;
-          border:1rpx dotted #999999;
-          font-size:30rpx;
-          font-weight:100;
-          border-radius:30rpx;
-        }
-      }
-    }
-  }
-  // 右侧快速导航栏
-  .nav_quick_tool{
-    position:fixed;
-    z-index:1000;
-    right:30rpx;
-    bottom:60rpx;
-    width:80rpx;
-    padding:20rpx 0;
-    border-radius:40rpx;
-    background:#eee;
-    .nav_quick{
-      width:60rpx;
-      margin:0 10rpx;
-      font-size:32rpx;
-      .nav{
-        width:60rpx;
-        height:60rpx;
-        line-height:60rpx;
-        text-align:center;
-        display:inline-block;
-        &.active{
-          color:#fff;
-          background:#555;
-          border-radius:50%;
-        }
-      }
-    }
-  }
-  // 搜索图标
-  .search-icon{
-    position:absolute;
-    width:580rpx;
-    height:80rpx;
-    background:#eee;
-    top:10rpx;
-    left:60rpx;
-    border-radius:40rpx;
-    overflow:hidden;
-    display:flex;
-    .icon{
-      width:70rpx;
-      height:70rpx;
-      margin:5rpx;
-      text-align: center;
-      font-size: 28px;
-    }
-    .input{
-      flex:1;
-      height:80rpx;
-      line-height:80rpx;
-      font-size:30rpx;
-      padding-left:40rpx
-    }
-  }
-  // 关闭搜索
-  .close-icon{
-    position:absolute;
-    width:80rpx;
-    height:80rpx;
-    top:10rpx;
-    right:30rpx;
-    border-radius:40rpx;
-    overflow:hidden;
-    display:flex;
-    .icon{
-      width:70rpx;
-      height:70rpx;
-      margin:5rpx;
-      text-align: center;
-      font-size: 30px;
-    }
-  }
-  // 搜索结果
-  .search-result{
-    width: 100vw;
-    height: 100%;
-    box-sizing:border-box;
-    padding:0 130rpx 0 0;
-    overflow-x:hidden;
-    overflow-y:scroll;
-    background:#fff;
-    .search-option{
-      width:90%;
-      margin:10rpx auto;
-      padding:0 10rpx;
-      font-size:30rpx;
-      box-sizing:border-box;
-      height:80rpx;
-      line-height:80rpx;
-      border-bottom:1rpx solid #ddd;
-      overflow:hidden;
-      text-indent:30rpx;
-    }
-  }
-}
-</style>
+<!-- 选择地区插件 -->
 <template>
   <view wx:if="{{show}}" class="icityer">
     <!-- 悬浮搜索图标 -->
     <view class="search-icon">
-      <input type="" name="" class="input" placeholder="请输入省、市、区" bindinput="getSearchText"></input>
+      <input value="{{searchText}}" type="" name="" class="input" placeholder="请输入省、市、区" @input="getSearchText"></input>
       <icon type="search" class="icon" @tap.stop="showSearchInput"/>
     </view>
     <view class="close-icon">
       <icon type="clear" class="icon" size="30" @tap.stop="hideSearchInput"/>
     </view>
     <!-- 搜索结果 -->
-    <view wx:if="{{expandSearchInput}}" class="search-result">
-      <view class="search-option" wx:for="{{searchData}}" wx:for-item="item" data-province="{{item.province}}" data-city="{{item.city}}" data-area="{{item.area}}" @tap.stop="onSelected">
+    <view wx:if="{{showSearch}}" class="search-result">
+      <view class="search-option" wx:for="{{searchData}}" wx:for-item="item" wx:key="i{{index}}" data-province="{{item.province}}" data-city="{{item.city}}" data-area="{{item.area}}" @tap.stop="onSelected">
         {{item.area}}-{{item.city}}-{{item.province}}
       </view>
     </view>
@@ -180,6 +38,18 @@
 <script>
   import wepy from 'wepy'
   import cityData from './cityData'
+  // 预处理省列表数据,进行按照字母分组,全局只执行一遍
+  function getLetterCity() {
+    let _data = {}
+    for (let i in cityData) {
+      if (!_data[cityData[i].key]) {
+        _data[cityData[i].key] = [cityData[i]]
+      } else {
+        _data[cityData[i].key].push(cityData[i])
+      }
+    }
+    return _data
+  }
   export default class AreaCity extends wepy.component {
     props = {
       show: {
@@ -193,25 +63,25 @@
       navFlag: 'A',
       navs: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
       cityData: cityData,
-      expandSearchInput: false,
+      DataSort: getLetterCity(),
+      showSearch: false,
       searchText: '',
       searchData: []
     }
 
     computed = {
       // 处理省列表数据,进行按照字母分组
-      DataSort: function () {
-        let _data = {}
-        for (let i in this.cityData) {
-          if (!_data[this.cityData[i].key]) {
-            _data[this.cityData[i].key] = [this.cityData[i]]
-          } else {
-            _data[this.cityData[i].key].push(this.cityData[i])
-          }
-        }
-        console.log(_data)
-        return _data
-      }
+      // DataSort: function () {
+      //   let _data = {}
+      //   for (let i in this.cityData) {
+      //     if (!_data[this.cityData[i].key]) {
+      //       _data[this.cityData[i].key] = [this.cityData[i]]
+      //     } else {
+      //       _data[this.cityData[i].key].push(this.cityData[i])
+      //     }
+      //   }
+      //   return _data
+      // }
     }
 
     watch = {
@@ -221,17 +91,29 @@
     methods = {
       // 已选择城市
       onSelected: function (e) {
+        const self = this
         let _province = e.currentTarget.dataset.province
         let _city = e.currentTarget.dataset.city
         let _area = e.currentTarget.dataset.area
-        this.expandSearchInput = false
-        wx.showToast({
-          title: _area
-        })
-        this.$emit('select', {
-          province: _province,
-          city: _city,
-          area: _area
+        wx.showModal({
+          title: '您选择的城市',
+          content: _province + '-' + _city + '-' + _area,
+          success: function (res) {
+            // 确定
+            if(res.confirm){
+              self.$emit('select', {
+                province: _province,
+                city: _city,
+                area: _area
+              })
+              self.showSearch = false
+              self.$apply()
+            }
+            // 取消
+            if(res.cancel){
+
+            }
+          }
         })
       },
       // 左侧滑动关联右侧关系
@@ -245,17 +127,18 @@
       },
       // 关闭隐藏
       hideSearchInput: function () {
-        this.expandSearchInput = false
+        this.searchText = '';
+        this.showSearch = false
       },
       // 点击搜索
       showSearchInput: function () {
         if (this.searchText==='') {
           wx.showToast({
-            title: '请输入省、市、区'
+            title: '请输入关键字'
           })
           return
         }
-        this.expandSearchInput = true
+        this.showSearch = true
         this.pushSearchCityData(this.searchText)
       },
       // 关键字
@@ -266,7 +149,7 @@
     }
 
     onLoad() {
-
+      
     }
     // 左侧滑动关联右侧关系
     getTopToNav () {
@@ -366,3 +249,146 @@
     }
   }
 </script>
+<style lang="less" scoped>
+  .icityer{
+    width:100vw;
+    height:100vh;
+    box-sizing:border-box;
+    padding:100rpx 10rpx 10rpx 10rpx;
+    position:absolute;
+    z-index:10000;
+    top:0;
+    left:0;
+    overflow:hidden;
+    background:#fff;
+    // 城市列表
+    .container{
+      width: 100vw;
+      height:100%;
+      box-sizing:border-box;
+      padding:0 130rpx 0 50rpx;
+      .types{
+        .provinces{
+          .province{
+            font-size:42rpx;
+            font-weight:600;
+            padding:5rpx 15rpx;
+            // text-align:right;
+            border-bottom:1rpx solid #898989;
+          }
+          .citys{
+            .city{
+              font-size:36rpx;
+              font-weight:300;
+              padding:5rpx 0;
+              margin:5rpx 0;
+            }
+          }
+          .areas{
+            display:inline-block;
+            padding:10rpx 20rpx;
+            margin:10rpx;
+            // border:1rpx dotted #000;
+            font-size:30rpx;
+            font-weight:100;
+            border-radius:30rpx;
+          }
+        }
+      }
+    }
+    // 右侧快速导航栏
+    .nav_quick_tool{
+      position:fixed;
+      z-index:1000;
+      right:30rpx;
+      bottom:60rpx;
+      width:80rpx;
+      padding:20rpx 0;
+      border-radius:40rpx;
+      background:#eee;
+      .nav_quick{
+        width:60rpx;
+        margin:0 10rpx;
+        font-size:32rpx;
+        .nav{
+          width:60rpx;
+          height:60rpx;
+          line-height:60rpx;
+          text-align:center;
+          display:inline-block;
+          &.active{
+            color:#fff;
+            background:#555;
+            border-radius:50%;
+          }
+        }
+      }
+    }
+    // 搜索图标
+    .search-icon{
+      position:absolute;
+      width:580rpx;
+      height:80rpx;
+      background:#eee;
+      top:10rpx;
+      left:60rpx;
+      border-radius:40rpx;
+      overflow:hidden;
+      display:flex;
+      .icon{
+        width:70rpx;
+        height:70rpx;
+        margin:5rpx;
+        text-align: center;
+        font-size: 28px;
+      }
+      .input{
+        flex:1;
+        height:80rpx;
+        line-height:80rpx;
+        font-size:30rpx;
+        padding-left:40rpx
+      }
+    }
+    // 关闭搜索
+    .close-icon{
+      position:absolute;
+      width:80rpx;
+      height:80rpx;
+      top:10rpx;
+      right:30rpx;
+      border-radius:40rpx;
+      overflow:hidden;
+      display:flex;
+      .icon{
+        width:70rpx;
+        height:70rpx;
+        margin:5rpx;
+        text-align: center;
+        font-size: 30px;
+      }
+    }
+    // 搜索结果
+    .search-result{
+      width: 100vw;
+      height: 100%;
+      box-sizing:border-box;
+      padding:0 130rpx 0 0;
+      overflow-x:hidden;
+      overflow-y:scroll;
+      background:#fff;
+      .search-option{
+        width:90%;
+        margin:10rpx auto;
+        padding:0 10rpx;
+        font-size:30rpx;
+        box-sizing:border-box;
+        height:80rpx;
+        line-height:80rpx;
+        border-bottom:1rpx solid #ddd;
+        overflow:hidden;
+        text-indent:30rpx;
+      }
+    }
+  }
+</style>
