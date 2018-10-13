@@ -4,6 +4,7 @@
     <view><navigator url="/pages/area-demo/area-select" hover-class="navigator-hover">地址选择器area-select</navigator></view>
     <view><navigator url="/pages/area-demo/area-city" hover-class="navigator-hover">地址选择器area-city</navigator></view>
     <view><navigator url="/pages/calendar-demo/calendar" hover-class="navigator-hover">日期选择器calendar</navigator></view>
+    <view><navigator url="/pages/calendar-demo/calendar2" hover-class="navigator-hover">日期选择器calendar2</navigator></view>
   </view>
 </template>
 

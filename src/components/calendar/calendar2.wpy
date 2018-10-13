@@ -85,7 +85,8 @@
         year: year,
         month: month,
         day: day
-      }
+      },
+      startDate: new Date(),
     }
 
     computed = {
@@ -209,29 +210,33 @@
     }
     // 渲染日历格子
     calculateDays(year, month) {
+      console.log(year, month)
       let days = []
-      const thisMonthDays = this.getThisMonthDays(year, month)
-      for (let i = 1; i <= thisMonthDays; i++) {
-        let day = { day: i, choosed: false }
-        let checkDay = year + '-' + this.setDouble(month) + '-' + this.setDouble(i)
-        //设置icon的日期
-        if (this.hasIconList && this.hasIconList.length > 0) {
-          this.hasIconList.map((item) => {
-            if (checkDay === item) {
-              day.hasIcon = true
-            }
-          })
-        }
-        //设置选中日期
-        if (checkDay === this.currentDate) {
-          day.choosed = true
-        }
-        //设置今天日期
-        if (parseInt(year) === parseInt(this.now.year) && parseInt(month) === parseInt(this.now.month) && i === parseInt(this.now.day)) {
-          day.today = true
-        }
-        days.push(day)
-      }
+      let dayslength = 35
+      let startDate = new Date(this.startDate.getFullYear(), this.startDate.getMonth())
+      let startDay = this.getFirstDayOfWeek(year, month)
+      console.log(startDay)
+      let leftPadding = startDay
+      Array.from({length: leftPadding}, (v, k) => -(k + 1)).reverse().forEach((minus) => {
+        console.log(minus)
+        console.log(new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + minus))
+        days.push({
+          day: new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + minus).getDate(),
+          currentMonth: false
+        })
+      })
+      Array.from({length: dayslength - days.length}, (v, k) => k).forEach((plus) => {
+        // days.push({
+        //   day: new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + plus).getDate(),
+        //   currentMonth: false
+        // })
+        // if()
+        days.push({
+          day: new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + plus).getDate(),
+          currentMonth: true
+        })
+      })
+      console.log(days)
       this.days = days
       this.$apply()
     }

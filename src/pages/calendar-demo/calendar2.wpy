@@ -13,7 +13,7 @@
 
 <script>
   import wepy from 'wepy'
-  import Calendar from '@/components/calendar/calendar'
+  import Calendar from '@/components/calendar/calendar2'
   export default class Index extends wepy.page {
     config = {
       navigationBarTitleText: 'calendar'

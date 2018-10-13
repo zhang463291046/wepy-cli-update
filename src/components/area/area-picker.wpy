@@ -1,3 +1,4 @@
+<!-- 选择省市区插件 -->
 <template>
   <view wx:if="{{show}}" class="cascade_box">
     <view class="cascade_hei" animation="{{animationData.fadeAnim}}"></view>
