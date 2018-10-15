@@ -8,6 +8,10 @@
 import wepy from 'wepy'
 // 使用async/await语法糖
 import 'wepy-async-function'
+//全局挂载iview中的$Toast,$Message
+import { $Toast, $Message } from './iview/base/index'
+wepy.$Toast = $Toast
+wepy.$Message = $Message
 // 网络请求
 import '@/api/index'
 import { setStore } from 'wepy-redux'
