@@ -232,6 +232,7 @@
     }
 
     onLoad() {
+      console.log('page',this)
       let self = this
       this.$parent.getUserInfo(function (userInfo) {
         if (userInfo) {

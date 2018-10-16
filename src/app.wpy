@@ -12,8 +12,18 @@ import 'wepy-async-function'
 import { $Toast, $Message } from './iview/base/index'
 wepy.$Toast = $Toast
 wepy.$Message = $Message
+// 工具类
+import util from '@/util/util'
+// 加密方式
+import md5 from '@/plugin/wxMd5/md5'
+// 自定义提示框
+import tip from '@/plugin/wxTip/tip'
+wepy.util = util
+wepy.md5 = md5
+wepy.$tip = tip
 // 网络请求
 import '@/api/index'
+// 数据管理
 import { setStore } from 'wepy-redux'
 import configStore from './store'
 const store = configStore()
@@ -102,7 +112,8 @@ export default class extends wepy.app {
   }
 
   onLaunch() {
-    console.log(wepy)
+    console.log('wepy',wepy)
+    console.log('app',this)
     this.testAsync()
   }
 

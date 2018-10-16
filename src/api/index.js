@@ -1,16 +1,10 @@
 import wepy from 'wepy'
-// 工具类
-import util from '@/util/util'
-// 加密方式
-import md5 from '@/plugin/wxMd5/md5'
-// 提示框
-import tip from '@/plugin/wxTip/tip'
 // 服务器基础URL
 const baseURL = 'https://sujiefs.com'
 
 // 简单封装一下$post方法Promise
 wepy.$post = (url, params = {}) => {
-  tip.loading();
+  wepy.$tip.loading();
   return new Promise((resolve, reject) => {
     wepy.request({
       url: baseURL + url,
@@ -20,15 +14,15 @@ wepy.$post = (url, params = {}) => {
         'Content-Type': 'application/json' 
       }
     }).then( res => {
-      tip.loaded();
+      wepy.$tip.loaded();
       var response = res.data
       if (response.code == '0') {
         resolve(response)
       } else {
-        tip.alert('系统维护中...')
+        wepy.$tip.alert('系统维护中...')
       }
     }).catch((error) => {
-      tip.loaded();
+      wepy.$tip.loaded();
       reject(error)
     })
   })
@@ -36,7 +30,7 @@ wepy.$post = (url, params = {}) => {
 
 // 简单封装一下$post方法async/await
 // wepy.$post = async(url, params = {}) => {
-//   tip.loading();
+//   wepy.$tip.loading();
 //   let res = await wepy.request({
 //     url: baseURL + url,
 //     method: 'POST',
@@ -45,7 +39,7 @@ wepy.$post = (url, params = {}) => {
 //       'Content-Type': 'application/json' 
 //     }
 //   });
-//   tip.loaded();
+//   wepy.$tip.loaded();
 //   var response = res.data
 //   return response;
 // };
