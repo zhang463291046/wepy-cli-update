@@ -90,6 +90,7 @@
       return state.counter.asyncNum
     },
     sumNum (state) {
+      console.log(state)
       return state.counter.num + state.counter.asyncNum
     }
   })

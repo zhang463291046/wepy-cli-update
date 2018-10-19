@@ -24,10 +24,11 @@ wepy.$tip = tip
 // 网络请求
 import '@/api/index'
 // 数据管理
-import { setStore } from 'wepy-redux'
-import configStore from './store'
-const store = configStore()
-setStore(store)
+// import { setStore } from 'wepy-redux'
+import '@/store'
+// const store = configStore()
+// console.log(store)
+// setStore(store)
 
 export default class extends wepy.app {
   config = {

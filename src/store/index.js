@@ -1,8 +1,10 @@
-import { createStore, applyMiddleware } from 'redux'
+import { createStore, applyMiddleware, combineReducers } from 'redux'
+import { setStore } from 'wepy-redux'
 import promiseMiddleware from 'redux-promise'
-import rootReducer from './reducers'
+import counter from './reducers'
 
-export default function configStore () {
-  const store = createStore(rootReducer, applyMiddleware(promiseMiddleware))
-  return store
-}
+const rootReducer = combineReducers({
+  counter
+})
+
+setStore(createStore(rootReducer, applyMiddleware(promiseMiddleware)))
