@@ -7,25 +7,29 @@ const defaultState = {
   asyncNum: 0
 }
 
-export default handleActions(
-	{
-	  INCREMENT: (state, action) => ({
-	  	...state,
-	    num: state.num + 1
-	  }),
-	  DECREMENT(state, action) {
-	    return {
-	      ...state,
-	      num: state.num - 1
-	    }
-	  },
-	  ASYNC_INCREMENT(state, action) {
-	  	console.log(state, action)
-	    return {
-	      ...state,
-	      asyncNum: state.asyncNum + action.payload
-	    }
-	  }
-	}, 
-	defaultState
-)
+export default handleActions({
+  INCREMENT(state, action) {
+    return {
+      ...state,
+      num: state.num + 1
+    }
+  },
+  DECREMENT(state, action) {
+    return {
+      ...state,
+      num: state.num - 1
+    }
+  },
+  ASYNC_INCREMENT(state, action) {
+    return {
+      ...state,
+      asyncNum: state.asyncNum + action.payload
+    }
+  },
+  ASYNC_DECREMENT(state, action) {
+    return {
+      ...state,
+      asyncNum: state.asyncNum - action.payload
+    }
+  }
+}, defaultState)

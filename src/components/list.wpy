@@ -8,11 +8,11 @@
 </style>
 <template>
   <view class="list">
-  <view>
-    <button @tap="add" size="mini">添加列表</button>
-  </view>
+    <view>
+      <button @tap="add" size="mini">添加列表</button>
+    </view>
     <block wx:for-items="{{list}}" wx:for-index="index" wx:for-item="item" wx:key="id">
-      <view @tap="tap" class="mylist">
+      <view @tap="tap(item)" class="mylist">
         <text>{{item.id}}</text>: {{item.title}}
       </view>
     </block>
@@ -32,20 +32,18 @@
     }
 
     events = {
-      'index-broadcast': (...args) => {
-        let $event = args[args.length - 1]
-        console.log(`${this.$name} receive ${$event.name} from ${$event.source.name}`)
+      'index-broadcast': (args, $event) => {
+        console.log(args,`${this.$name} receive ${$event.name} from ${$event.source.$name}`)
       }
     }
 
     methods = {
-      tap () {
-        // this.num = this.num + 1
-        console.log(this.$name + ' tap')
+      tap (item) {
+        console.log(item.id + item.title)
       },
       add () {
         let len = this.list.length
-        this.list.push({id: len + 1, title: 'title_' + len})
+        this.list.push({id: len, title: 'title_' + len})
       }
     }
 

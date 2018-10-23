@@ -60,30 +60,9 @@ iconfont文件样式用css,需要修改成less,建议用远程服务器  <font c
 ## 技术说明文档
 | 描述                       | 依赖包                   | 备注                      |
 |----------------------------|--------------------------|---------------------------|
-| 网络请求                   | axios                    |暂无                       |
 | 模拟数据请求               | mock                     |暂无                       |
-| websocket通讯              | mqtt                     |暂无                       |
 | 基础UI框架                 | iview                    |暂无                       |
-| 报表图形统计               | vue-echarts              |暂无                       |
-| 样式支持less,sass,scss     | less和less-loader支持less;node-sass和sass-loader支持sass,scss|暂无         |
-| 路由配置                   | vue-router               |暂无                       |
-| 状态管理树                 | vuex                     |暂无                       |
-| 国际化语言库               | vue-i18n                 |暂无                       |
-| 城市联级                   | iview-area               |暂无                       |
-| 高德地图                   | AMap                     |暂无                       |
-
-
-## 开发常用包推荐
-| 描述                       | 依赖包                   |备注                       |
-|----------------------------|--------------------------|---------------------------|
-| 网络请求                   | axios                    |暂无                       |
-| websocket通讯              | mqtt                     |暂无                       |
-| 基础UI框架                 | element,iview            |暂无                       |
-| 报表图形统计               | vue-echarts              |暂无                       |
-| 样式支持less,sass,scss     | less和less-loader支持less;node-sass和sass-loader支持sass,scss|暂无         |
-| 路由配置                   | vue-router               |暂无                       |
-| 状态管理树                 | vuex                     |暂无                       |
-| 国际化语言库               | vue-i18n                 |暂无                       |
-| 货币转换                   | accounting               |暂无                       |
+| 样式支持less               | wepy-compiler-less       |暂无                       |
+| 状态管理树                 | redux                    |暂无                       |
 
 ## 欢迎有兴趣的小伙伴给点提议,在Issues中留言.后期会扩展组件

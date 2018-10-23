@@ -7,7 +7,7 @@ export default class testMixin extends wepy.mixin {
   methods = {
     tap () {
       this.mixin = 'mixin data was changed'
-      console.log('mixin method tap')
+      console.log('mixin method tap 后执行')
     }
   }
 
