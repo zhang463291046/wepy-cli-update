@@ -1,7 +1,12 @@
 <style lang="less">
+  // 阿里图标库
   @import "/assets/iconfont/iconfont";
+  // 全局基础样式
   @import "/style/base";
+  // 全局样式
   @import "/style/style";
+  // html解析wxml样式
+  @import "/plugin/wxParse/wxParse.wxss";
 </style>
 
 <script>
@@ -24,11 +29,7 @@ wepy.$tip = tip
 // 网络请求
 import '@/api/index'
 // 数据管理
-// import { setStore } from 'wepy-redux'
 import '@/store'
-// const store = configStore()
-// console.log(store)
-// setStore(store)
 
 export default class extends wepy.app {
   config = {
@@ -42,7 +43,9 @@ export default class extends wepy.app {
       'pages/area-demo/area-select',
       'pages/area-demo/area-city',
       'pages/calendar-demo/calendar',
-      'pages/calendar-demo/calendar2'
+      'pages/calendar-demo/calendar2',
+      'pages/wxParse-demo/wxParse',
+      'pages/wxParse-demo/wxParse2'
     ],
     window: {
       backgroundTextStyle: 'light',

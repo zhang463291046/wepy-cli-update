@@ -1,0 +1,103 @@
+<template>
+  <view class="container">
+    <import src="/plugin/wxParse/wxParse.wxml" />
+    <view style="padding: 0 30px; border-bottom:1px solid #eee;">
+      <view style="text-align:center; font-weight:bold;margin-top:20px;">实验室功能1: 动态插入</view>
+      <view style="text-align:center;color: #333;margin-top:5px;margin-bottom:10px;">本功能是一种扩展的可能,我们可以在需要动态插入标签的地方动态使用此方法</view>
+      <template is="wxParse" data="{{wxParseData:insertData.nodes}}" />
+      <view style="text-align:center">
+        <button type="default" size="mini" bindtap="insertNodeTap"> 点击插入节点 </button>
+      </view>
+    </view>
+
+    <view style="padding: 0 30px; border-bottom:1px solid #eee;">
+      <view style="text-align:center; font-weight:bold;margin-top:20px;">实验室功能2: a标签跳转</view>
+      <view style="text-align:center;color: #333;margin-top:5px;margin-bottom:10px;">在阅读类场景下，很可能需要在文中使用路由跳转。试验在动态获取解析到的src来转换本地路由</view>
+      <template is="wxParse" data="{{wxParseData:aHrefHrefData.nodes}}" />
+    </view>
+
+    <view style="padding: 0 30px; border-bottom:1px solid #eee;">
+      <view style="text-align:center; font-weight:bold;margin-top:20px;">实验室功能2: 小表情emoji</view>
+      <view style="text-align:center;color: #333;margin-top:5px;margin-bottom:10px;">在回复等场景下，很可能会出现小表情，添加进来</view>
+      <template is="wxParse" data="{{wxParseData:emojisData.nodes}}" />
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import WxParse from "@/plugin/wxParse/wxParse"
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: 'WxParse'
+    }
+
+    components = {
+    
+    }
+
+    data = {
+      
+    }
+
+    methods = {
+      
+    }
+
+    async onLoad () {
+      var that = this;
+      /**
+      * 初始化emoji设置
+      * WxParse.emojisInit(reg,baseSrc,emojis)
+      * 1.reg，如格式为[00]=>赋值 reg='[]'
+      * 2.baseSrc,为存储emojis的图片文件夹
+      * 3.emojis,定义表情键值对
+      */
+      WxParse.emojisInit('[]', "/plugin/wxParse/emojis/", {
+        "00": "00.gif",
+        "01": "01.gif",
+        "02": "02.gif",
+        "03": "03.gif",
+        "04": "04.gif",
+        "05": "05.gif",
+        "06": "06.gif",
+        "07": "07.gif",
+        "08": "08.gif",
+        "09": "09.gif",
+        "09": "09.gif",
+        "10": "10.gif",
+        "11": "11.gif",
+        "12": "12.gif",
+        "13": "13.gif",
+        "14": "14.gif",
+        "15": "15.gif",
+        "16": "16.gif",
+        "17": "17.gif",
+        "18": "18.gif",
+        "19": "19.gif",
+      });
+      var aHrefHrefData = '<div style="color:red;text-align:center;padding:20px;"><a href="https://weappdev.com/index.html">点击我，可以跳转</a></div>';
+      WxParse.wxParse('aHrefHrefData', 'html', aHrefHrefData, that);
+
+      var emojisData = '<div style="color:red;text-align:center;padding:20px;">我带有小表情[00][01][02][03]</div>';
+      WxParse.wxParse('emojisData', 'html', emojisData, that);
+    }
+
+    insertNodeTap(e){
+      var that = this;
+      var insertData = '<div style="color:red;text-align:center;padding:20px;">我是一个被插入的元素</div>';
+      WxParse.wxParse('insertData', 'html', insertData, that);
+    }
+
+    wxParseTagATap(e){
+      var href = e.currentTarget.dataset.src;
+      console.log(href);
+      //我们可以在这里进行一些路由处理
+      wx.navigateBack()
+    }
+  }
+</script>
+
+<style lang="less">
+
+</style>

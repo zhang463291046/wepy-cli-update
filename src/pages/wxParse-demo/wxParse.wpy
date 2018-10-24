@@ -1,0 +1,129 @@
+<template>
+  <view class="container">
+    <import src="/plugin/wxParse/wxParse.wxml"/> 
+    <view class="wxParse">
+      <template is="wxParse" data="{{wxParseData:article.nodes}}"/>
+    </view>
+
+    <view style="padding: 20px 10px; background-color:#eee;">
+      <block wx:for="{{replyTemArray}}" wx:key="">
+        回复{{index}}:<template is="wxParse" data="{{wxParseData:item}}"/>
+      </block>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import WxParse from "@/plugin/wxParse/wxParse"
+  import htmlString from "./html.js"
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: 'WxParse'
+    }
+
+    components = {
+    
+    }
+
+    data = {
+      
+    }
+
+    methods = {
+      
+    }
+
+    async onLoad () {
+      var that = this
+      /**
+      * 初始化emoji设置
+      * WxParse.emojisInit(reg,baseSrc,emojis)
+      * 1.reg，如格式为[00]=>赋值 reg='[]'
+      * 2.baseSrc,为存储emojis的图片文件夹
+      * 3.emojis,定义表情键值对
+      */
+      WxParse.emojisInit('[]', "/plugin/wxParse/emojis/", {
+        "00": "00.gif",
+        "01": "01.gif",
+        "02": "02.gif",
+        "03": "03.gif",
+        "04": "04.gif",
+        "05": "05.gif",
+        "06": "06.gif",
+        "07": "07.gif",
+        "08": "08.gif",
+        "09": "09.gif",
+        "09": "09.gif",
+        "10": "10.gif",
+        "11": "11.gif",
+        "12": "12.gif",
+        "13": "13.gif",
+        "14": "14.gif",
+        "15": "15.gif",
+        "16": "16.gif",
+        "17": "17.gif",
+        "18": "18.gif",
+        "19": "19.gif",
+      });
+      /**
+       * html解析示例
+       */
+      var article = htmlString;
+      WxParse.wxParse('article', 'html', article, that, 5);
+      /**
+       * 多数据解析示例
+       */
+      var replyHtml0 = `<div style="margin-top:10px;height:50px;">
+        <p class="reply">
+          wxParse回复0:不错，喜欢[03][04]
+        </p>  
+      </div>`;
+      var replyHtml1 = `<div style="margin-top:10px;height:50px;">
+        <p class="reply">
+          wxParse回复1:不错，喜欢[03][04]
+        </p>  
+      </div>`;
+      var replyHtml2 = `<div style="margin-top:10px;height:50px;">
+        <p class="reply">
+          wxParse回复2:不错，喜欢[05][07]
+        </p>  
+      </div>`;
+      var replyHtml3 = `<div style="margin-top:10px;height:50px;">
+        <p class="reply">
+          wxParse回复3:不错，喜欢[06][08]
+        </p>  
+      </div>`;
+      var replyHtml4 = `<div style="margin-top:10px; height:50px;">
+        <p class="reply">
+          wxParse回复4:不错，喜欢[09][08]
+        </p>  
+      </div>`;
+      var replyHtml5 = `<div style="margin-top:10px;height:50px;">
+        <p class="reply">
+          wxParse回复5:不错，喜欢[07][08]
+        </p>  
+      </div>`;
+      var replyArr = [];
+      replyArr.push(replyHtml0);
+      replyArr.push(replyHtml1);
+      replyArr.push(replyHtml2);
+      replyArr.push(replyHtml3);
+      replyArr.push(replyHtml4);
+      replyArr.push(replyHtml5);
+
+
+      for (let i = 0; i < replyArr.length; i++) {
+        WxParse.wxParse('reply' + i, 'html', replyArr[i], that);
+        console.log(replyArr[i])
+        if (i === replyArr.length - 1) {
+          WxParse.wxParseTemArray("replyTemArray",'reply', replyArr.length, that)
+        }
+      }
+    }
+  }
+</script>
+
+<style lang="less">
+
+</style>
