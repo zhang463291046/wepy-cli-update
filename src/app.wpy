@@ -14,7 +14,8 @@ import wepy from 'wepy'
 // 使用async/await语法糖
 import 'wepy-async-function'
 //全局挂载iview中的$Toast,$Message
-import { $Toast, $Message } from './iview/base/index'
+import {$Toast, $Message} from 'wepy-iview'
+// import { $Toast, $Message } from './iView/base/index'
 wepy.$Toast = $Toast
 wepy.$Message = $Message
 // 工具类

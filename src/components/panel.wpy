@@ -4,18 +4,16 @@
     margin-top: 20rpx;
     text-align: left;
     font-size: 12px;
-    padding-top: 20rpx;
-    padding-left: 50rpx;
-    padding-bottom: 20rpx;
+    padding: 10rpx;
     border: 1px solid #ccc;
-
+    box-sizing:border-box;
     .title {
       padding-bottom: 20rpx;
       font-size: 14px;
       font-weight: bold;
     }
     .info {
-      padding: 15rpx;
+      // padding: 15rpx;
     }
     .testcounter {
       margin-top: 15rpx;
