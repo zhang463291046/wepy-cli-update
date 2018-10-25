@@ -23,18 +23,18 @@
     }
 
     components = {
-    
+      
     }
 
     data = {
-      
+     
     }
 
     methods = {
       
     }
 
-    async onLoad () {
+    onLoad () {
       var that = this
       /**
       * 初始化emoji设置
@@ -70,6 +70,7 @@
        * html解析示例
        */
       var article = htmlString;
+      // 将数据绑定到this.article
       WxParse.wxParse('article', 'html', article, that, 5);
       /**
        * 多数据解析示例
@@ -111,15 +112,11 @@
       replyArr.push(replyHtml3);
       replyArr.push(replyHtml4);
       replyArr.push(replyHtml5);
-
-
       for (let i = 0; i < replyArr.length; i++) {
         WxParse.wxParse('reply' + i, 'html', replyArr[i], that);
-        console.log(replyArr[i])
-        if (i === replyArr.length - 1) {
-          WxParse.wxParseTemArray("replyTemArray",'reply', replyArr.length, that)
-        }
       }
+      // 将this.reply数据合并为replyTemArray数组
+      WxParse.wxParseTemArray("replyTemArray",'reply', replyArr.length, that)
     }
   }
 </script>

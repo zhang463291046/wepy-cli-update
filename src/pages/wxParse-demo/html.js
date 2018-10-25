@@ -52,7 +52,8 @@ const html = `
 	<div style="margin-top:10px;">
 		<h3 style="color: #000;">支持图片自适应</h3>
 		<blockquote>wxParse可以动态计算图片大小并进行自适应适配</blockquote>
-		
+		<img src="http://a.hiphotos.baidu.com/image/pic/item/9a504fc2d5628535959cf4cf94ef76c6a6ef63db.jpg" alt="">
+		<img src="http://e.hiphotos.baidu.com/image/pic/item/48540923dd54564e1e1ac2d7b7de9c82d0584fe4.jpg" alt="">
 	</div>
 	<div style="margin-top:10px;">
 		<h3 style="color: #000;">支持图片点击预览,左右滑动预览</h3>

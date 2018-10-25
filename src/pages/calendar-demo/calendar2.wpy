@@ -43,7 +43,6 @@
     }
     async onLoad (options, preloadData) {
       console.log(options, preloadData)
-      console.log(this)
     }
   }
 </script>

@@ -4,10 +4,11 @@
     <view><navigator url="/pages/area-demo/area-select" hover-class="navigator-hover">地址选择器area-select</navigator></view>
     <view><navigator url="/pages/area-demo/area-city" hover-class="navigator-hover">地址选择器area-city</navigator></view>
     <view><navigator url="/pages/calendar-demo/calendar" hover-class="navigator-hover">日期选择器calendar</navigator></view>
-    <view><navigator url="/pages/calendar-demo/calendar2?id=1&name=2" hover-class="navigator-hover">日期选择器calendar2,带参数options</navigator></view>
+    <view><navigator url="/pages/calendar-demo/calendar2?id=1&name=2" hover-class="navigator-hover">calendar2,带参数options</navigator></view>
     <view @tap="nextPage">触发下一页面onPrefetch方法</view>
-    <view><navigator url="/pages/wxParse-demo/wxParse" hover-class="navigator-hover">解析html插件wxParse</navigator></view>
-    <view><navigator url="/pages/wxParse-demo/wxParse2" hover-class="navigator-hover">解析html插件wxParse</navigator></view>
+    <view @tap="nextPage2">触发onPrefetch,带参数preload</view>
+    <view><navigator url="/pages/wxParse-demo/wxParse" hover-class="navigator-hover">插件wxParse解析html</navigator></view>
+    <view><navigator url="/pages/wxParse-demo/wxParse2" hover-class="navigator-hover">插件wxParse解析html2</navigator></view>
     
   </view>
 </template>
@@ -32,8 +33,13 @@
     }
 
     methods = {
-      // wepy.$navigate跳转,触发下一页面onPrefetch方法
+      // wepy.$navigate,wepy.$redirect,wepy.$switch跳转,触发下一页面onPrefetch方法
       nextPage(){
+        this.$navigate('/pages/calendar-demo/calendar2')
+      },
+      nextPage2(){
+        // 设置参数preload,下一个页面preloadData获取
+        this.$preload('uid', 1)
         this.$navigate('/pages/calendar-demo/calendar2')
       }
     }
@@ -43,10 +49,7 @@
     }
 
     onLoad() {
-       // this.$prefetch('preload', 123)
-       // 设置参数preload,下一个页面preloadData接收
-       this.$preload('preload', 123)
-       console.log(this)
+     
     }
   }
 </script>

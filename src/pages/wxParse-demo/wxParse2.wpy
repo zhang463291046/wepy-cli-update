@@ -17,7 +17,7 @@
     </view>
 
     <view style="padding: 0 30px; border-bottom:1px solid #eee;">
-      <view style="text-align:center; font-weight:bold;margin-top:20px;">实验室功能2: 小表情emoji</view>
+      <view style="text-align:center; font-weight:bold;margin-top:20px;">实验室功能3: 小表情emoji</view>
       <view style="text-align:center;color: #333;margin-top:5px;margin-bottom:10px;">在回复等场景下，很可能会出现小表情，添加进来</view>
       <template is="wxParse" data="{{wxParseData:emojisData.nodes}}" />
     </view>
