@@ -1,0 +1,51 @@
+<template>
+  <view class="container">
+    <vcode bgColor="#e6f6ff" fontColor="#165189" hasPoint="{{ false }}" hasLine="{{ false }}" @change="onChange" />
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import vcode from '@/components/vcode/vcode'
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '二维码'
+    }
+
+    components = {
+      vcode: vcode
+    }
+
+    data = {
+      url: 'https://github.com/yingye'
+    }
+
+    computed = {
+
+    }
+
+    methods = {
+      onChange() {
+        console.log(1)
+      }
+    }
+
+    events = {
+
+    }
+
+    onLoad() {
+      
+    }
+  }
+</script>
+<style lang="less">
+  .panel{
+    width:100%;
+    margin-top:20rpx;
+    text-align:left;
+    font-size:12px;
+    padding:10rpx;
+    box-sizing:border-box;
+  }
+</style>
