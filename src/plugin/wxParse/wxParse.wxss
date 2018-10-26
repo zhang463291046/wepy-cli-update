@@ -17,9 +17,11 @@
     color: #666;
     line-height: 1.8;
 }
-view{
-    word-break:break-all; overflow:auto;
-}
+/*[修改日期:20181025]注释这一行,修复view标签全局污染问题
+*view {
+*  word-break: break-all;
+*  overflow: auto;
+}*/
 .wxParse-inline{
     display: inline;
     margin: 0;

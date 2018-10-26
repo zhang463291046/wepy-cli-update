@@ -64,5 +64,6 @@ iconfont文件样式用css,需要修改成less,建议用远程服务器  <font c
 | 基础UI框架                 | iview                    |暂无                       |
 | 样式支持less               | wepy-compiler-less       |暂无                       |
 | 状态管理树                 | redux                    |暂无                       |
+| html解析wxml样式           | wxParse                  |插件中wxParse.js存在数据data赋值的BUG, wxParse.wxss文件中样式存在BUG,已被修复;|
 
 ## 欢迎有兴趣的小伙伴给点提议,在Issues中留言.后期会扩展组件
