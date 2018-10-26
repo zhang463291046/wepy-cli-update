@@ -1,0 +1,68 @@
+<template>
+  <view class="container">
+    <canvas style="width: 200px; height: 200px;" canvas-id="myQrcode"></canvas>
+    <view class="panel">
+      <form bindsubmit="formSubmit">
+        <input value="{{url}}" name='url' placeholder="请输入url地址" auto-focus/>
+        <button type="primary" formType="submit">生成二维码</button>
+      </form>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import drawQrcode from 'weapp-qrcode'
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '二维码'
+    }
+
+    components = {
+
+    }
+
+    data = {
+      url: 'https://github.com/yingye'
+    }
+
+    computed = {
+
+    }
+
+    methods = {
+      formSubmit(e) {
+        this.url = e.detail.value.url
+        drawQrcode({
+          width: 200,
+          height: 200,
+          canvasId: 'myQrcode',
+          text: this.url
+        })
+      }
+    }
+
+    events = {
+
+    }
+
+    onLoad() {
+      drawQrcode({
+        width: 200,
+        height: 200,
+        canvasId: 'myQrcode',
+        text: this.url
+      })
+    }
+  }
+</script>
+<style lang="less">
+  .panel{
+    width:100%;
+    margin-top:20rpx;
+    text-align:left;
+    font-size:12px;
+    padding:10rpx;
+    box-sizing:border-box;
+  }
+</style>

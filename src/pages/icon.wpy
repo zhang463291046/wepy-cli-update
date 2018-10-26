@@ -7,6 +7,7 @@
 
 <script>
   import wepy from 'wepy'
+  import drawQrcode from 'weapp-qrcode'
   export default class Index extends wepy.page {
     config = {
       navigationBarTitleText: '图标库'
@@ -33,7 +34,7 @@
     }
 
     onLoad() {
-
+      
     }
   }
 </script>

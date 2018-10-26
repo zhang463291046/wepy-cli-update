@@ -46,7 +46,8 @@ export default class extends wepy.app {
       'pages/calendar-demo/calendar',
       'pages/calendar-demo/calendar2',
       'pages/wxParse-demo/wxParse',
-      'pages/wxParse-demo/wxParse2'
+      'pages/wxParse-demo/wxParse2',
+      'pages/qrcode-demo/qrcode'
     ],
     window: {
       backgroundTextStyle: 'light',

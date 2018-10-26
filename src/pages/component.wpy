@@ -9,7 +9,7 @@
     <view @tap="nextPage2">触发onPrefetch,带参数preload</view>
     <view><navigator url="/pages/wxParse-demo/wxParse" hover-class="navigator-hover">插件wxParse解析html</navigator></view>
     <view><navigator url="/pages/wxParse-demo/wxParse2" hover-class="navigator-hover">插件wxParse解析html2</navigator></view>
-    
+    <view><navigator url="/pages/qrcode-demo/qrcode" hover-class="navigator-hover">插件qrcode生成二维码</navigator></view>
   </view>
 </template>
 
