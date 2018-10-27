@@ -1,15 +1,15 @@
 <template>
   <view class="container">
-    <vcode bgColor="#e6f6ff" fontColor="#165189" hasPoint="{{ false }}" hasLine="{{ false }}" @change="onChange" />
+    <vcode bgColor="#e6f6ff" fontColor="#165189" :hasLine="hasLine" @change.user="change"/>
   </view>
 </template>
 
 <script>
   import wepy from 'wepy'
   import vcode from '@/components/vcode/vcode'
-  export default class Index extends wepy.page {
+  export default class Vcode extends wepy.page {
     config = {
-      navigationBarTitleText: '二维码'
+      navigationBarTitleText: '验证码'
     }
 
     components = {
@@ -17,7 +17,7 @@
     }
 
     data = {
-      url: 'https://github.com/yingye'
+      hasLine: false
     }
 
     computed = {
@@ -25,8 +25,8 @@
     }
 
     methods = {
-      onChange() {
-        console.log(1)
+      change(val) {
+        console.log(val)
       }
     }
 
@@ -39,13 +39,7 @@
     }
   }
 </script>
+
 <style lang="less">
-  .panel{
-    width:100%;
-    margin-top:20rpx;
-    text-align:left;
-    font-size:12px;
-    padding:10rpx;
-    box-sizing:border-box;
-  }
+  
 </style>

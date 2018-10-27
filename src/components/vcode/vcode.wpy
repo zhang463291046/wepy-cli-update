@@ -1,17 +1,10 @@
-<style lang="less">
-  
-</style>
-
 <template>
-  <view class="panel">
-    <canvas canvas-id="canvasId" style="width: {{ width + 'px' }}; height: {{ height + 'px' }};" @tap="redraw"></canvas>
-  </view>
+  <canvas canvas-id="canvasId" style="width: {{ width + 'px' }}; height: {{ height + 'px' }};" @tap="redraw"></canvas>
 </template>
 
 <script>
   import wepy from 'wepy'
-  export default class Index extends wepy.component {
-    // behaviors: [baseBehavior],
+  export default class Vcode extends wepy.component {
     props = {
       str: {
         type: String,
@@ -19,7 +12,7 @@
       },
       num: {
         type: Number,
-        default: 2
+        default: 4
       },
       width: {
         type: Number,
@@ -39,15 +32,11 @@
       },
       hasPoint: {
         type: Boolean,
-        default: false
+        default: true
       },
       hasLine: {
         type: Boolean,
-        default: false
-      },
-      canvasId: {
-        type: String,
-        default: 'wuxvcode'
+        default: true
       }
     }
 
@@ -63,18 +52,12 @@
     onLoad () {
       this.draw()
     }
+
     draw() {
-      const { width, height, canvasId } = this.data
-      console.log(this.data)
-      // this.ctx = this.ctx || wx.createCanvasContext(canvasId, this)
-      console.log( width, height, canvasId)
+      const { width, height } = this.data
+      // 清除矩形
       this.ctx.clearRect(0, 0, width, height)
-      this.ctx.fillRect(0, 0, width, height)
-      this.ctx.setFillStyle('red')
-      const value = this.render(this.ctx, this.data)
-      console.log(value)
-      this.ctx.draw()
-      // this.ctx.draw(false, () => this.triggerEvent('change', { value }))
+      this.render(this.ctx, this.data)
     }
     /**
      * 获取范围内的随机数
@@ -100,7 +83,7 @@
      * @param {Object} ctx canvas 绘图上下文
      * @param {Object} opts 配置项
      * @param {String} opts.str 验证码范围
-     * @param {Number} opts.num 验证码长度，默认值 6
+     * @param {Number} opts.num 验证码长度，默认值 4
      * @param {Number} opts.width 画布宽度，默认值 120
      * @param {Number} opts.height 画布高度，默认值 40
      * @param {String} opts.bgColor 画布背景色
@@ -108,59 +91,68 @@
      * @param {Boolean} opts.hasPoint 是否显示干扰点，默认 true
      * @param {Boolean} opts.hasLine 是否显示干扰线，默认 true
      */
-      render(ctx, opts = {}) {
-        const { str, num, width, height, bgColor, fontColor, hasPoint, hasLine } = opts
-        let vcode = ''
+    render(ctx, opts = {}) {
+      const { str, num, width, height, bgColor, fontColor, hasPoint, hasLine } = opts
+      let vcode = ''
 
-        if (typeof ctx.setTextBaseline === 'function') {
-            ctx.setTextBaseline('bottom')
-        }
+      // 设置文字的竖直对齐
+      if (typeof ctx.setTextBaseline === 'function') {
+        ctx.setTextBaseline('bottom')
+      }
 
-        // 绘制矩形，并设置填充色
-        ctx.setFillStyle(bgColor ? bgColor : this.randomColor(180, 240))
-        ctx.fillRect(0, 0, width, height)
+      // 绘制矩形，并设置填充色
+      ctx.setFillStyle(bgColor ? bgColor : this.randomColor(180, 240))
+      ctx.fillRect(0, 0, width, height)
 
-        // 绘制随机生成 n 位的验证码
+      // 绘制随机生成 n 位的验证码
+      for (let i = 0; i < num; i++) {
+        const x = (width - 10) / num * i + 10
+        const y = this.randomNum(height / 2, height)
+        const deg = this.randomNum(-45, 45)
+        const txt = str[this.randomNum(0, str.length)]
+        const fontSize = this.randomNum(16, 40)
+        const halfHeight = parseInt(height / 2)
+
+        vcode += txt
+        ctx.setFillStyle(fontColor ? fontColor : this.randomColor(10, 100))
+        ctx.setFontSize(fontSize > halfHeight ? halfHeight : fontSize)
+        ctx.translate(x, y)
+        ctx.rotate(deg * Math.PI / 180)
+        ctx.fillText(txt, 0, 0)
+        ctx.rotate(-deg * Math.PI / 180)
+        ctx.translate(-x, -y)
+      }
+
+      // 绘制干扰线
+      if (!!hasLine) {
         for (let i = 0; i < num; i++) {
-            const x = (width - 10) / num * i + 10
-            const y = this.randomNum(height / 2, height)
-            const deg = this.randomNum(-45, 45)
-            const txt = str[this.randomNum(0, str.length)]
-            const fontSize = this.randomNum(16, 40)
-            const halfHeight = parseInt(height / 2)
-
-            vcode += txt
-            ctx.setFillStyle(fontColor ? fontColor : this.randomColor(10, 100))
-            ctx.setFontSize(fontSize > halfHeight ? halfHeight : fontSize)
-            ctx.translate(x, y)
-            ctx.rotate(deg * Math.PI / 180)
-            ctx.fillText(txt, 0, 0)
-            ctx.rotate(-deg * Math.PI / 180)
-            ctx.translate(-x, -y)
+          ctx.setStrokeStyle(this.randomColor(90, 180))
+          ctx.beginPath()
+          ctx.moveTo(this.randomNum(0, width), this.randomNum(0, height))
+          ctx.lineTo(this.randomNum(0, width), this.randomNum(0, height))
+          ctx.stroke()
         }
+      }
 
-        // 绘制干扰线
-        if (!!hasLine) {
-          for (let i = 0; i < num; i++) {
-            ctx.setStrokeStyle(this.randomColor(90, 180))
-            ctx.beginPath()
-            ctx.moveTo(this.randomNum(0, width), this.randomNum(0, height))
-            ctx.lineTo(this.randomNum(0, width), this.randomNum(0, height))
-            ctx.stroke()
-          }
+      // 绘制干扰点
+      if (!!hasPoint) {
+        for (let i = 0; i < num * 10; i++) {
+          ctx.setFillStyle(this.randomColor(0, 255))
+          ctx.beginPath()
+          ctx.arc(this.randomNum(0, width), this.randomNum(0, height), 1, 0, 2 * Math.PI)
+          ctx.fill()
         }
+      }
 
-        // 绘制干扰点
-        if (!!hasPoint) {
-          for (let i = 0; i < num * 10; i++) {
-            ctx.setFillStyle(this.randomColor(0, 255))
-            ctx.beginPath()
-            ctx.arc(this.randomNum(0, width), this.randomNum(0, height), 1, 0, 2 * Math.PI)
-            ctx.fill()
-          }
-        }
-        console.log(ctx)
-        return vcode
+      // 执行绘制
+      ctx.draw()
+
+      // 通知父组件vcode值
+      this.$emit('change', vcode)
     }
   }
 </script>
+
+<style lang="less">
+  
+</style>
